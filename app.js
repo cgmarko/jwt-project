@@ -111,12 +111,12 @@ app.get("/welcome", auth, (req, res) => {
   res.status(200).send("Welcome 🙌 ");
 });
 
-// const port = process.env.PORT || API_PORT;
+const port = process.env.PORT || 3030;
 
 // // your code
 
-// app.listen(port, () => {
-//   console.log(`server started on port ${port}`);
-// });
+app.listen(process.env.PORT, () => {
+  console.log(`server started on port ${process.env.PORT}`);
+});
 
 module.exports = app;
