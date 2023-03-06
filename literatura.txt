@@ -1,0 +1,9 @@
+https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
+
+https://stackoverflow.com/questions/68958221/mongoparseerror-options-usecreateindex-usefindandmodify-are-not-supported
+
+https://stackoverflow.com/questions/47448381/error-bcrypt-is-not-defined-after-clicking-submit-button-in-registration-page
+
+https://stackoverflow.com/questions/60494979/jwt-is-not-defined-even-after-i-imported-it-with-require
+
+https://www.freecodecamp.org/news/how-to-deploy-nodejs-application-with-render/
