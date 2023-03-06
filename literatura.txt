@@ -7,3 +7,5 @@ https://stackoverflow.com/questions/47448381/error-bcrypt-is-not-defined-after-c
 https://stackoverflow.com/questions/60494979/jwt-is-not-defined-even-after-i-imported-it-with-require
 
 https://www.freecodecamp.org/news/how-to-deploy-nodejs-application-with-render/
+
+https://render.com/docs/node-version

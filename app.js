@@ -111,7 +111,7 @@ app.get("/welcome", auth, (req, res) => {
   res.status(200).send("Welcome 🙌 ");
 });
 
-const port = process.env.PORT || API_PORT;
+const PORT = process.env.PORT || API_PORT;
 
 // your code
 
