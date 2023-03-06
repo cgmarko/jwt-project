@@ -9,3 +9,5 @@ https://stackoverflow.com/questions/60494979/jwt-is-not-defined-even-after-i-imp
 https://www.freecodecamp.org/news/how-to-deploy-nodejs-application-with-render/
 
 https://render.com/docs/node-version
+
+https://feedback.render.com/features/p/enable-native-static-outbound-ips
