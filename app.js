@@ -3,7 +3,6 @@ require("./config/database").connect();
 const express = require("express");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-
 const app = express();
 
 app.use(express.json());
@@ -13,16 +12,18 @@ app.use(express.json());
 // importing user context
 const User = require("./model/user");
 
+
+const admin_auth = require("./middleware/admin_auth");
 // Register
-app.post("/register", async (req, res) => {
+app.post("/register", admin_auth, async (req, res) => {
 
     // Our register logic starts here
     try {
       // Get user input
-      const { first_name, last_name, email, password } = req.body;
+      const { first_name, last_name, email, password, administrator } = req.body;
         
       // Validate user input
-      if (!(email && password && first_name && last_name)) {
+      if (!(email && password && first_name && last_name && typeof administrator == "boolean")) {
         res.status(400).send("All input is required");
       }
       if (email != `${email}`.toLocaleLowerCase()) {
@@ -46,9 +47,22 @@ app.post("/register", async (req, res) => {
         last_name,
         email: email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
+        administrator: administrator
       });
   
       // Create token
+      if (administrator) {  
+      const token = jwt.sign(
+        { user_id: user._id, email },
+        process.env.ADMIN_TOKEN_KEY,
+        {
+          expiresIn: "2h",
+        }
+      );
+          // save user token
+          user.token = token;
+      }
+      else {
       const token = jwt.sign(
         { user_id: user._id, email },
         process.env.TOKEN_KEY,
@@ -56,8 +70,12 @@ app.post("/register", async (req, res) => {
           expiresIn: "2h",
         }
       );
-      // save user token
-      user.token = token;
+          // save user token
+          user.token = token;
+      }
+
+
+  
   
       // return new user
       res.status(201).json(user);
@@ -80,34 +98,62 @@ app.post("/login", async (req, res) => {
         res.status(400).send("All input is required");
       }
       // Validate if user exist in our database
+
       const user = await User.findOne({ email });
-  
-      if (user && (await bcrypt.compare(password, user.password))) {
-        // Create token
-        const token = jwt.sign(
-          { user_id: user._id, email },
-          process.env.TOKEN_KEY,
-          {
-            expiresIn: "2h",
-          }
-        );
-  
-        // save user token
-        user.token = token;
-  
-        // user
-        res.status(200).json(user);
+
+      if (user.administrator) {
+        if (user && (await bcrypt.compare(password, user.password))) {
+          // Create token
+          const token = jwt.sign(
+            { user_id: user._id, email },
+            process.env.ADMIN_TOKEN_KEY,
+            {
+              expiresIn: "2h",
+            }
+          );
+    
+          // save user token
+          user.token = token;
+    
+          // user
+          res.status(200).json(user);
+        }
       }
-      res.status(400).send("Invalid Credentials");
+      else  if (user && (await bcrypt.compare(password, user.password))) {
+          // Create token
+          const token = jwt.sign(
+            { user_id: user._id, email },
+            process.env.TOKEN_KEY,
+            {
+              expiresIn: "2h",
+            }
+          );
+    
+          // save user token
+          user.token = token;
+    
+          // user
+          res.status(200).json(user);
+        }
+      else{
+        res.status(400).send("Invalid Credentials");
+      }
+      
     } catch (err) {
       console.log(err);
     }
     // Our register logic ends here
   });
 
-  const auth = require("./middleware/auth");
+const auth = require("./middleware/auth");
+
+
 
 app.get("/welcome", auth, (req, res) => {
+  res.status(200).send("Welcome 🙌 ");
+});
+
+app.get("/admin_welcome", admin_auth, (req, res) => {
   res.status(200).send("Welcome 🙌 ");
 });
 
@@ -116,7 +162,7 @@ const port = process.env.PORT || 3030;
 // // your code
 
 app.listen(process.env.PORT, () => {
-  console.log(`server started on port ${process.env.PORT}`);
+  console.log(`server started on port ${port}`);
 });
 
 module.exports = app;
