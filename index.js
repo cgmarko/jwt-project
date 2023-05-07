@@ -6,6 +6,6 @@ const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
 
 // server listening 
-server.listen(process.env.PORT, () => {
+server.listen(9999, () => {
   console.log(`Server running on port ${port}`);
 });
