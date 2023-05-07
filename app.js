@@ -272,12 +272,14 @@ app.get("/admin_welcome", admin_auth, (req, res) => {
   res.status(200).send("Welcome 🙌 ");
 });
 
-const port = process.env.PORT || 3030;
+const { API_PORT } = process.env;
+
+const port = process.env.PORT || API_PORT;
 
 // // your code
 
 app.listen(process.env.PORT, () => {
-  console.log(`server started on port ${process.env.PORT}`);
+  console.log(`server started on port ${port}`);
 });
 
 module.exports = app;
