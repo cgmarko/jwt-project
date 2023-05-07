@@ -277,7 +277,7 @@ const port = process.env.PORT || 3030;
 // // your code
 
 app.listen(process.env.PORT, () => {
-  console.log(`server started on port ${port}`);
+  console.log(`server started on port ${process.env.PORT}`);
 });
 
 module.exports = app;
